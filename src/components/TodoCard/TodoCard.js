@@ -9,34 +9,34 @@ export default class TodoCard extends Component {
     constructor(props) {
         super(props)
         this.state = {
-            task: []
+            taskText: ""
         }  
-        this.addTask = this.addTask.bind(this)
+        //this.addTask = this.addTask.bind(this)
+        this.updateText = this.updateText.bind(this)
     }
 
-    addTask (e) {
+    updateText (taskText) {
+        this.setState({taskText})
+    }
+
+    /*addTask (e) {
         debugger
         let a = this.state.task
         debugger
-        /*let newTask = {
-            text: e,
-            key: Date.now()
-        }*/
-        debugger
-         a.push(e)
+         a.unshift(e)
         debugger
         //debugger
         this.setState({
             task: a
         })
         debugger
-    }
-    
+    }*/
+   
 
     render() {
-        const {task} = this.state
+        const {taskText} = this.state
         return <div className = "TodoCard">
-                <AddToDo task={task} addTask={this.addTask} viewTask ={this.viewTask}/>
+                <AddToDo taskText={taskText} addTask={this.addTask} updateText ={this.updateText}/>
                 <ViewTodo />
                 <TodoNavigation />
             </div>
