@@ -1,10 +1,16 @@
 import React from "react"
 
-export const AddToDo = () => {
-        
+export const AddToDo = (props) => {
+        debugger
+        const task = props.task
+        debugger
+        const handleTask = (e) => {
+          props.addTask(e.target.value)
+        }
         return <div>
-                <input type="text"placeholder="Введите задачу"/>
-                <hr/>
+                <input value={task} onChange={handleTask} type="text" placeholder="Добавить задачу"/>
+                <input type="submit" value="Добавить"/>
+                 <hr/>
             </div>
     
 }
