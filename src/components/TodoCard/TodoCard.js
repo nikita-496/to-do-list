@@ -5,6 +5,7 @@ import { TodoNavigation} from "./TodoCardElements/TodoNavigation/TodoNavigation"
 
 import './TodoCard.css'
 
+
 export default class TodoCard extends Component {
     constructor(props) {
         super(props)
@@ -14,6 +15,7 @@ export default class TodoCard extends Component {
         }  
         this.updateText = this.updateText.bind(this)
         this.createTask = this.createTask.bind(this)
+        this.deleteTask = this.deleteTask.bind(this)
     }
 
     updateText (taskText) {
@@ -36,9 +38,12 @@ export default class TodoCard extends Component {
        
     }
 
-    /*deleteTask () {
-
-    }*/
+    deleteTask (key) {
+      const filterTask = this.state.task.filter(task => task.key !== key)
+      this.setState({
+        task:filterTask
+      })
+    }
 
 
     render() {
@@ -46,7 +51,7 @@ export default class TodoCard extends Component {
         return <div className = "TodoCard">
 
                 <AddToDo taskText={taskText} createTask={this.createTask} updateText ={this.updateText}/>
-                <ViewTodo task={task}/>
+                <ViewTodo task={task} deleteTask={this.deleteTask}/>
                 <TodoNavigation />
 
             </div>
