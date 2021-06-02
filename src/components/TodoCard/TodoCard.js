@@ -1,6 +1,6 @@
 import React, { Component } from "react"
 import { AddToDo} from "./TodoCardElements/AddTodo/AddTodo"
-import { ViewTodo} from "./TodoCardElements/ViewTodo/ViewTodo"
+import  ViewTodo from "./TodoCardElements/ViewTodo/ViewTodo"
 import { TodoNavigation} from "./TodoCardElements/TodoNavigation/TodoNavigation"
 
 import './TodoCard.css'
@@ -51,7 +51,7 @@ export default class TodoCard extends Component {
         return <div className = "TodoCard">
 
                 <AddToDo taskText={taskText} createTask={this.createTask} updateText ={this.updateText}/>
-                <ViewTodo task={task} deleteTask={this.deleteTask}/>
+                <ViewTodo task={task} deleteTask={this.deleteTask} updateText={this.updateText}/>
                 <TodoNavigation />
 
             </div>
