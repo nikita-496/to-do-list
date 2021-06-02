@@ -1,10 +1,18 @@
 import React from "react"
 
-export const ViewTodo = () => {
-        
-        return <div>
-                <input type = "checkbox"/>
-                <span>Кодинг</span> <hr/>
-            </div>
+export const ViewTodo = (props) => {
+        const listTask = props.task.map((item) => {
+           return <div>
+           <input type = "checkbox" /> 
+           <label key={item.key}>{item.text}</label>
+           </div>
+        })
+
+        return <>
+                {listTask}
+                 <hr/>
+            </>
     
 }
+
+

@@ -1,16 +1,16 @@
 import React from "react"
 
 export const AddToDo = (props) => {
-        debugger
+        //debugger
         const taskText = props.taskText
-        debugger
+        //debugger
         const handleText = (e) => {
           props.updateText(e.target.value)
         }
         const handleTask = (e) => {
           props.createTask(e.target.value)
         }
-        debugger
+        //debugger
         return <div>
                 <input value={taskText} onChange={handleText} type="text" placeholder="Создать задачу"/>
                 <button type="button" value={taskText} onClick={handleTask}>Добавить</button>

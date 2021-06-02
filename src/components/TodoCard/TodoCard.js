@@ -21,19 +21,19 @@ export default class TodoCard extends Component {
     }
     
     createTask (nameTask) {
-        
-        let itemArray = this.state.task
-        itemArray.unshift({
-            text: nameTask, 
-            key: Date.now()
-        }) 
-        
-        this.setState({
-            task: itemArray,
-            taskText: ""
-        })
-
-        console.log(this.state.task)
+        if (this.state.taskText !== "") {
+            let itemArray = this.state.task
+            itemArray.unshift({
+                text: nameTask, 
+                key: Date.now()
+            }) 
+            
+            this.setState({
+                task: itemArray,
+                taskText: ""
+            })
+        }
+       
     }
 
     /*deleteTask () {
@@ -42,11 +42,13 @@ export default class TodoCard extends Component {
 
 
     render() {
-        const {taskText} = this.state
+        const {taskText, task} = this.state
         return <div className = "TodoCard">
+
                 <AddToDo taskText={taskText} createTask={this.createTask} updateText ={this.updateText}/>
-                <ViewTodo taskText={taskText}/>
+                <ViewTodo task={task}/>
                 <TodoNavigation />
+
             </div>
     }
 }
