@@ -45,6 +45,10 @@ export default class TodoCard extends Component {
       })
     }
 
+    updateTask (taskText) {
+      this.setState({taskText})
+  }
+
 
     render() {
         const {taskText, task} = this.state
