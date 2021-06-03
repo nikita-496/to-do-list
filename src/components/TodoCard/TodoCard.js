@@ -11,7 +11,7 @@ export default class TodoCard extends Component {
         super(props)
         this.state = {
             taskText: "",
-            task: []
+            tasks: []
         }  
         this.updateText = this.updateText.bind(this)
         this.createTask = this.createTask.bind(this)
@@ -24,14 +24,14 @@ export default class TodoCard extends Component {
     
     createTask (nameTask) {
         if (this.state.taskText !== "") {
-            let itemArray = this.state.task
+            let itemArray = this.state.tasks
             itemArray.unshift({
                 text: nameTask, 
                 key: Date.now()
             }) 
             
             this.setState({
-                task: itemArray,
+                tasks: itemArray,
                 taskText: ""
             })
         }
@@ -39,9 +39,9 @@ export default class TodoCard extends Component {
     }
 
     deleteTask (key) {
-      const filterTask = this.state.task.filter(task => task.key !== key)
+      const filterTask = this.state.tasks.filter(task => task.key !== key)
       this.setState({
-        task:filterTask
+        tasks:filterTask
       })
     }
 
@@ -51,11 +51,11 @@ export default class TodoCard extends Component {
 
 
     render() {
-        const {taskText, task} = this.state
+        const {taskText, tasks} = this.state
         return <div className = "TodoCard">
 
                 <AddToDo taskText={taskText} createTask={this.createTask} updateText ={this.updateText}/>
-                <ViewTodo task={task} deleteTask={this.deleteTask} updateText={this.updateText}/>
+                <ViewTodo tasks={tasks} deleteTask={this.deleteTask} updateText={this.updateText}/>
                 <TodoNavigation />
 
             </div>
