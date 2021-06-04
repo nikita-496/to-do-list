@@ -19,9 +19,12 @@ const ListTask = (props) => {
  class ViewLlistItem extends Component {
    constructor(props) {
      super(props)
-     this. state = {editMode: false}
+     this.state = {
+       editMode: false,
+       taskText: this.props.value
+      }
    }
-
+   //создание фокусировки на поле ввода
    focusInput = (component) => {
     if (component) {
       component.focus();
@@ -36,25 +39,32 @@ const ListTask = (props) => {
 
 deactivateEditMode = () => {
   this.setState({
-      editMode: false 
+      editMode: false
     })
   }
 
   deleteItem = (key) => {
     this.props.deleteTask(key)    
 }
+
+handleTask = (e) => {
+  this.setState({
+    taskText: e.target.value
+  })
+  console.log(this.state.taskText)
+}
+
   
   render() {
-    const value = this.props.value
     return <li onDoubleClick={this.activateEditMode}>
         {!this.state.editMode ?
         <>
           <input type = "checkbox" /> 
-          <label> {value} </label>
+          <label> {this.state.taskText} </label>
           <Delete id={this.props.id}  deleteItem={this.deleteItem} />
         </>
         :<>
-          <input  type="text"  ref={this.focusInput}    onBlur={this.deactivateEditMode} value={value}/>
+          <input  type="text"  ref={this.focusInput} onBlur={this.deactivateEditMode} value={this.state.taskText} onChange={this.handleTask}/>
         </>
         }
       </li>
