@@ -9,15 +9,22 @@ import { BrowserRouter } from 'react-router-dom';
 
 function App() {
   return (
-    <BrowserRouter>
+    <div className="App">
+       <Header />
+       <TodoCard/>
+       <Footer />
+    </div>
+  );
+}
+export default App;
+
+
+ {/* <BrowserRouter>
       <div className="App">
         <Header />
         <Route path="/" component={TodoCard}/>
         <Route path="/active" component={Active}/>
-        <Route path="/complate" component={Complate}/>
+        <Route path="/omplate" component={Complate}/>
         <Footer />
       </div>
-    </BrowserRouter>
-  );
-}
-export default App;
+   </BrowserRouter>*/}
