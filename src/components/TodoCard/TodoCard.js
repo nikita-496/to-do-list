@@ -34,8 +34,7 @@ export default class TodoCard extends Component {
                 tasks: itemArray,
                 taskText: ""
             })
-        }
-       
+        }  
     }
 
     deleteTask (key) {
