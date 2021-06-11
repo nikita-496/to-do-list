@@ -13,15 +13,15 @@ class  TaskItem extends Component {
   constructor(props) {
     super(props) 
     this.state = {isChecked: false}
+    
   }
   
-   handleComplate = () => {
-     let e = !this.state.isChecked
-     this.props.createTask(12, e)
+   handleComplate = (e) => {
+     this.props.createTask(this.props.value, e)
     this.setState({isChecked: e})
-    debugger
   }
 
+  
   render () {
     let taskType
     if (this.state.isChecked) {
@@ -32,13 +32,12 @@ class  TaskItem extends Component {
 
     return <li className="taskItem">
       {/*Если пользователь кликнул по checkbox*/}
-      <input type="checkbox" onChange={this.handleComplate}/>
+      <input type="checkbox" onChange={() => this.handleComplate(!this.state.isChecked)}/>
       {taskType}
       <button>Удалить</button>
   </li>
   }  
 }
-
 
 const ViewTask = (props) => {
   
@@ -47,11 +46,14 @@ const ViewTask = (props) => {
   const listItems = tasks.map (task => {
     return <TaskItem key={task.key} value={task.text} createTask={createTask}/>
   })
+  
+  const сomplatedTasks = tasks.filter(task => task.isComplate)
+  console.log(сomplatedTasks)
 return <BrowserRouter>
         <h1>ViewTask</h1>
         <Route path="/all" render={(props) => <All listItems={listItems}/>} />
         <Route path="/active" render={(props) => <Active />} />
-        <Route path="/complated" render={(props) => <Complated />} />
+        <Route path="/complated" render={(props) => <Complated сomplatedTasks={сomplatedTasks}/>} />
 
         <NavBar />
           

@@ -31,20 +31,27 @@ export default class TodoCard extends Component {
     }
     
     createTask (nameTask, isComplate = false) {
-        if (this.state.taskText !== "") {
-            let itemArray = this.state.tasks
+        let itemArray = this.state.tasks
+        if (this.state.taskText !== "" && !isComplate) {
             itemArray.unshift({
                 text: nameTask, 
                 key: Date.now(),
                 isComplate
             }) 
-            
-            this.setState({
-                tasks: itemArray,
-                taskText: ""
-            })
+            //если задача завершенная
+        }else if (isComplate) {
+          this.setState({
+            tasks: itemArray[0].isComplate = isComplate
+        })
+        }else {
+          this.setState({
+            tasks: itemArray[0].isComplate = isComplate
+        })
         }
-        console.log(this.state.tasks)  
+        this.setState({
+          tasks: itemArray,
+          taskText: ""
+      })  
     }
 
     deleteTask (key) {
