@@ -43,10 +43,6 @@ export default class TodoCard extends Component {
           this.setState({
             tasks: itemArray[0].isComplate = isComplate
         })
-        }else {
-          this.setState({
-            tasks: itemArray[0].isComplate = isComplate
-        })
         }
         this.setState({
           tasks: itemArray,

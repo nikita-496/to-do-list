@@ -8,7 +8,7 @@ import { NavBar } from '../NavBar/NavBar';
 
 import './ViewTask.css'
 
-//Получить из список названий для каждой задачи
+//Получить список названий для каждой задачи
 class  TaskItem extends Component {
   constructor(props) {
     super(props) 
@@ -24,6 +24,7 @@ class  TaskItem extends Component {
   
   render () {
     let taskType
+     //Если пользователь кликнул по checkbox
     if (this.state.isChecked) {
       taskType = <label className="taskComplate">{this.props.value}</label>
     } else {
@@ -31,7 +32,6 @@ class  TaskItem extends Component {
     }
 
     return <li className="taskItem">
-      {/*Если пользователь кликнул по checkbox*/}
       <input type="checkbox" onChange={() => this.handleComplate(!this.state.isChecked)}/>
       {taskType}
       <button>Удалить</button>
@@ -46,7 +46,6 @@ const ViewTask = (props) => {
   const listItems = tasks.map (task => {
     return <TaskItem key={task.key} value={task.text} createTask={createTask}/>
   })
-  
   const сomplatedTasks = tasks.filter(task => task.isComplate)
   console.log(сomplatedTasks)
 return <BrowserRouter>
