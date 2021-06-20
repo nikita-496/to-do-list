@@ -1,23 +1,28 @@
 import React from "react"
 
-export const AddTask = (props) => {
+ const AddTask = (props) => {
+        const nameTask = props.nameTask
 
-        const taskText = props.taskText
-        //1 и 2 
-        const handleText = (e) => {
-          props.updateText(e.target.value)
+        const eventHandling = (func,e) => {
+          func(e.target.value)
         }
-        //4
+        //2шаг алгоритма
+        const handleName = (e) => {
+          eventHandling(props.updateNameTask,e)
+        }
+        //з шаг алгоритма
         const handleTask = (e) => {
-          props.createTask(e.target.value)
+          if (e !== "") {
+            eventHandling(props.createTask,e)
+          }
         }
 
         return <div>
-                <input value={taskText} onChange={handleText} type="text" placeholder="Создать задачу"/>
-                <button type="button" value={taskText} onClick={handleTask}>Добавить</button>
+                <input value={nameTask} onChange={handleName} type="text" placeholder="Создать задачу"/>
+                <button type="button" value={nameTask} onClick={handleTask}>Добавить</button>
                  <hr/>
             </div>
     
 }
 
-
+export default AddTask
