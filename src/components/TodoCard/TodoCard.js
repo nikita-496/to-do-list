@@ -26,9 +26,8 @@ export default class TodoCard extends Component {
     const itemTasks = this.state.tasks
     itemTasks.unshift({
       nameTask,
-      key: Date.now(),
-      isComplate: false
-    })
+      key: Date.now()
+  })
     this.setState({
       nameTask: "",
       tasks: itemTasks
@@ -39,7 +38,6 @@ export default class TodoCard extends Component {
     const {nameTask, tasks} = this.state
     return <div>
           <AddTask nameTask={nameTask} updateNameTask={this.updateNameTask} createTask = {this.createTask}/>
-          {/* 6 шаг*/}
           <ViewTask tasks={tasks}/>
     </div>
   }
