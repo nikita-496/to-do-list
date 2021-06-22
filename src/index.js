@@ -1,12 +1,41 @@
-import React from 'react';
+import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+
+
+class TodoCard extends Component {
+  render() {
+    const {tasks} = this.props
+    return (
+      <div>
+        <SearchBar />
+        <TaskTable tasks={tasks}/>
+        <ActiveTaskTable tasks={tasks}/>
+        <ComplateTaskTable tasks={tasks}/>
+        <NavBar />
+      </div>
+    )
+  }
+}
+
+
+
+
+
+const TASKS = [
+  {nameTask: "Кодинг", id: Date.now(), isCoding: false},
+  {nameTask: "Чтение", id: Date.now(), isCoding: false},
+  {nameTask: "Обед", id: Date.now(), isCoding: false},
+  {nameTask: "Спорт", id: Date.now(), isCoding: false},
+  {nameTask: "Ужин", id: Date.now(), isCoding: false}
+]
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <TodoCard tasks={TASKS} />
   </React.StrictMode>,
   document.getElementById('root')
 );
