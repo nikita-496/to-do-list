@@ -1,10 +1,61 @@
 import React, { Component } from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
 
 
+
+class TaskRow extends Component {
+  render() {
+    const {name} = this.props
+    return (
+      <li>
+        <input type="checkbox"/>
+        {name}
+        <button>Удалить</button>
+        
+      </li>
+    )
+  }
+}
+
+class TaskTable extends Component {
+  render() {
+    const {tasks} = this.props
+    const listTask = tasks.map((task) => {
+      return <TaskRow name={task.nameTask} key={task.id}/>
+    })
+    return (
+      <ul>
+        {listTask}
+      </ul>
+    )
+  }
+}
+class NavBar extends Component {
+  render() {
+    return (
+      <div>
+        <p>NavBar</p>
+        
+        <a>Все</a>
+        <a>Активные</a>
+        <a>Завершенные</a>
+      </div>
+    )
+  }
+}
+class SearchBar extends Component {
+  render() {
+    return (
+      <div>
+        <input type="text" placeholder="введите задачу..."/>
+        <button type="button">Добавить</button>
+        <hr />
+      </div>
+    )
+  }
+}
 
 class TodoCard extends Component {
   render() {
@@ -12,9 +63,7 @@ class TodoCard extends Component {
     return (
       <div>
         <SearchBar />
-        <TaskTable tasks={tasks}/>
-        <ActiveTaskTable tasks={tasks}/>
-        <ComplateTaskTable tasks={tasks}/>
+        <TaskTable tasks={tasks} />
         <NavBar />
       </div>
     )
@@ -30,7 +79,8 @@ const TASKS = [
   {nameTask: "Чтение", id: Date.now(), isCoding: false},
   {nameTask: "Обед", id: Date.now(), isCoding: false},
   {nameTask: "Спорт", id: Date.now(), isCoding: false},
-  {nameTask: "Ужин", id: Date.now(), isCoding: false}
+  {nameTask: "Ужин", id: Date.now(), isCoding: false},
+  {nameTask: "Прогулка", id: Date.now(), isCoding: false}
 ]
 
 ReactDOM.render(
