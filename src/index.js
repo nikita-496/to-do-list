@@ -4,87 +4,104 @@ import { BrowserRouter, NavLink, Route } from 'react-router-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
+function AllTask (props) {
+  function handleIsComplated (e, key = props.id) {
+    props.markTask(e.target.checked, key)
+    }
 
-
-
-function TaskTable (props) {
- function handleIsComplated (e, key = props.id) {
-  props.updataComplated(e.target.checked, key)
-  }
-    return (
-      <li>
+  return (
+    <li>
       <input type="checkbox" onClick={handleIsComplated}/>
       {props.name}
       <button>Удалить</button>
     </li>
-    )
-  }
-
-function NavBar (props) {
-    return (
-      <div>
-        <p>NavBar</p>
-        
-        <NavLink to="all">Все</NavLink>
-        <NavLink to="active">Активные</NavLink>
-        <NavLink to="complated">Завершенные</NavLink>
-      </div>
-    )
-}
-
-function ComplateTaskTable (props) {
-  const listTask = props.tasks.map((task) => {
-    return <TaskTable name={task.name} key={task.key} id={task.key} updataComplated={props.updataComplated}/>
-  })
-  return(
-    <ul>
-      {listTask}
-    </ul>
-    
   )
 }
 
-function ActiveTaskTAble (props) {
-  let actuveTask = props.tasks.filter(active => active.isComplated === false)
-  const listTask = actuveTask.map((task) => {
-    return <TaskTable name={task.name} key={task.key} id={task.key} updataComplated={this.updataComplated}/> })
-    console.log(actuveTask)
-    debugger
-return (
-  <ul>
-    Активные
-  </ul>
-)
+function ComplateTaskContainer (props) {
+  const tasks = props.tasks.filter(complate => complate.isComplated === true)
+
+  return(
+    <ul>
+      {tasks.map((task) => 
+        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask}/>
+      )} 
+    </ul>
+  )
 }
 
-class AllTask extends Component {
-  constructor (props) {
-    super(props)
+function ActiveTaskContainer(props) {
+  const tasks = props.tasks.filter(active => active.isComplated === false)
+
+  return(
+    <ul>
+      {tasks.map((task) => 
+        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask}/>
+      )} 
+    </ul>
+  )
+}
+
+function AllTaskContainer (props) {
+  const tasks = props.tasks
+  return(
+    <ul>
+      {tasks.map((task) => 
+        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask}/>
+      )} 
+    </ul>
+  )
+}
+
+function NavBar (props) {
+  return (
+    <div>
+      <p>NavBar</p>
+      
+      <NavLink to="all">Все</NavLink>
+      <NavLink to="active">Активные</NavLink>
+      <NavLink to="complated">Завершенные</NavLink>
+    </div>
+  )
+}
+
+class TaskTable extends Component{
+  constructor(props) {
+    super(props) 
     this.state = {
       isComplated: false
     }
-    this.updataComplated = this.updataComplated.bind(this)
+    this.markTask = this.markTask.bind(this)
   }
-
-  updataComplated (isComplated, key) {
-    this.setState({
-      isComplated
-    })
+  markTask (isComplated,key) {
     this.props.addTask("", isComplated, key)
   }
-
-  render () {
-    const listTask = this.props.tasks.map((task) => {
-      return <TaskTable name={task.name} key={task.key} id={task.key} updataComplated={this.updataComplated}/>
-    })
+  render(){
     return(
-      <ul>
-        {listTask}
-      </ul>
-      
+      <BrowserRouter>
+
+        <Route path="/all" render={(props)=> <AllTaskContainer  tasks={this.props.tasks} markTask={this.markTask}/>}/>
+        <Route path="/active"render={(props)=> <ActiveTaskContainer tasks={this.props.tasks} markTask={this.markTask}/>}/>
+        <Route path="/complated" render={(props)=> <ComplateTaskContainer  tasks={this.props.tasks} markTask={this.markTask}/>}/>
+
+      <NavBar />
+      </BrowserRouter>
     )
   }
 }
+
+/*function TaskTable (props) {
+  function handleIsComplated (e, key = props.id) {
+   props.updataComplated(e.target.checked, key)
+   }
+     return (
+       <li>
+       <input type="checkbox" onClick={handleIsComplated}/>
+       {props.name}
+       <button>Удалить</button>
+     </li>
+     )
+   }*/
 
 function SearchBar (props) {
   const nameTask = props.nameTask
@@ -153,16 +170,10 @@ class TodoCard extends Component {
   render() {
     const {nameTask, tasks} = this.state
     return (
-        <BrowserRouter>
-        <SearchBar nameTask={nameTask} createTask={this.createTask} addTask={this.addTask}/>
-
-        <Route path="/all" render={(props)=> <AllTask  tasks={tasks} addTask={this.addTask}/>}/>
-      <Route path="/active"render={(props)=> <ActiveTaskTAble  tasks={tasks} />}/>
-      <Route path="/complated" render={(props)=> <ComplateTaskTable  tasks={tasks}/>}/>
-
-        <NavBar />
-        </BrowserRouter>
-
+      <div>
+      <SearchBar nameTask={nameTask} createTask={this.createTask} addTask={this.addTask}/>
+      <TaskTable tasks={tasks} addTask={this.addTask}/>
+      </div>
     )
   }
 }
