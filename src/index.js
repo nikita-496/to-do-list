@@ -4,50 +4,74 @@ import { BrowserRouter, NavLink, Route } from 'react-router-dom';
 import './index.css';
 import reportWebVitals from './reportWebVitals';
 
-function AllTask (props) {
-  function handleIsComplated (e, key = props.id) {
-    props.markTask(e.target.checked, key)
+class AllTask extends Component {
+  constructor(props) {
+    super(props) 
+    this.state = {
+      isComplated: false
     }
-
-  return (
-    <li>
-      <input type="checkbox" onClick={handleIsComplated}/>
-      {props.name}
-      <button>Удалить</button>
-    </li>
-  )
+    this.handleIsComplated = this.handleIsComplated.bind(this)
+  }
+   handleIsComplated (e, key = this.props.id) {
+      this.setState({
+        isComplated: e.target.checked
+      })
+      this.props.markTask(e.target.checked, key)
+    }
+    
+   
+  
+  render () {
+    
+    const isComplated = this.state.isComplated
+    let taskType
+    //Пользоваетль нажал завершить задачу?
+    if (isComplated) {taskType = <label className="complated">{this.props.name}</label>}
+    else {taskType = <label>{this.props.name}</label>}
+  
+    return (
+      <li>
+        <input type="checkbox" onClick={this.handleIsComplated}/>
+        {taskType}
+        <button>Удалить</button>
+      </li>
+    )
+  }
+ 
 }
-
+//Завершенные
 function ComplateTaskContainer (props) {
   const tasks = props.tasks.filter(complate => complate.isComplated === true)
 
   return(
     <ul>
       {tasks.map((task) => 
-        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask}/>
+        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask} />
       )} 
     </ul>
   )
 }
 
+//Активные
 function ActiveTaskContainer(props) {
   const tasks = props.tasks.filter(active => active.isComplated === false)
-
+  debugger
   return(
     <ul>
       {tasks.map((task) => 
-        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask}/>
+        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask} />
       )} 
     </ul>
   )
 }
 
-function AllTaskContainer (props) {
+//Все
+function TaskContainer (props) {
   const tasks = props.tasks
   return(
     <ul>
       {tasks.map((task) => 
-        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask}/>
+        <AllTask name={task.name} key={task.key} id={task.key} markTask={props.markTask}  />
       )} 
     </ul>
   )
@@ -68,9 +92,6 @@ function NavBar (props) {
 class TaskTable extends Component{
   constructor(props) {
     super(props) 
-    this.state = {
-      isComplated: false
-    }
     this.markTask = this.markTask.bind(this)
   }
   markTask (isComplated,key) {
@@ -80,28 +101,15 @@ class TaskTable extends Component{
     return(
       <BrowserRouter>
 
-        <Route path="/all" render={(props)=> <AllTaskContainer  tasks={this.props.tasks} markTask={this.markTask}/>}/>
-        <Route path="/active"render={(props)=> <ActiveTaskContainer tasks={this.props.tasks} markTask={this.markTask}/>}/>
-        <Route path="/complated" render={(props)=> <ComplateTaskContainer  tasks={this.props.tasks} markTask={this.markTask}/>}/>
+        <Route path="/all" render={(props)=> <TaskContainer  tasks={this.props.tasks} markTask={this.markTask} />}/>
+        <Route path="/active"render={(props)=> <ActiveTaskContainer tasks={this.props.tasks} markTask={this.markTask} />}/>
+        <Route path="/complated" render={(props)=> <ComplateTaskContainer  tasks={this.props.tasks} markTask={this.markTask} />}/>
 
       <NavBar />
       </BrowserRouter>
     )
   }
 }
-
-/*function TaskTable (props) {
-  function handleIsComplated (e, key = props.id) {
-   props.updataComplated(e.target.checked, key)
-   }
-     return (
-       <li>
-       <input type="checkbox" onClick={handleIsComplated}/>
-       {props.name}
-       <button>Удалить</button>
-     </li>
-     )
-   }*/
 
 function SearchBar (props) {
   const nameTask = props.nameTask
