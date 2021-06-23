@@ -45,6 +45,11 @@ function ComplateTaskTable (props) {
 }
 
 function ActiveTaskTAble (props) {
+  let actuveTask = props.tasks.filter(active => active.isComplated === false)
+  const listTask = actuveTask.map((task) => {
+    return <TaskTable name={task.name} key={task.key} id={task.key} updataComplated={this.updataComplated}/> })
+    console.log(actuveTask)
+    debugger
 return (
   <ul>
     Активные
@@ -65,7 +70,7 @@ class AllTask extends Component {
     this.setState({
       isComplated
     })
-    this.props.updataTask(isComplated, key)
+    this.props.addTask("", isComplated, key)
   }
 
   render () {
@@ -109,42 +114,26 @@ class TodoCard extends Component {
     }
     this.createTask = this.createTask.bind(this)
     this.addTask = this.addTask.bind(this)
-    this.updataTask = this.updataTask.bind(this)
+    
   }
   createTask(nameTask) {
     this.setState({
       nameTask
     })
   }
-/*
-  updataComplated(isComplated, key) {
-    debugger
-    let taskArray = this.state.tasks
-    let complatedTask = taskArray.filter(task => task.key === key) 
-    console.log(complatedTask)
-  
-    this.setState({
-      isComplated
-    })
-    debugger
-  }
-  */
-  updataTask(isComplated, key) {
-   let n = this.state.tasks
-    let f = n.filter(n => n.key === key)
-    console.log (f)
-    let c = {
-      a:11,
-      b:12
-    }
-    c.a=13
-    console.log(c)
-    debugger
-  }
 
-  addTask(name, isComplated = false) {
+
+  addTask(name, isComplated = false, key) {
     let taskArray = this.state.tasks
-    if (name !== "") {
+
+    function updataTask(isComplated, key) {
+      let tasksCopy = JSON.parse(JSON.stringify(taskArray))
+      let complatedTAsk = tasksCopy.filter(task => task.key === key)
+      complatedTAsk[0].isComplated = isComplated
+      return tasksCopy      
+     }
+
+    if (name !== "" && !isComplated) {
       taskArray.unshift({
         name,
         key:Date.now(),
@@ -154,8 +143,12 @@ class TodoCard extends Component {
         nameTask: "",
         tasks: taskArray
       })
-    }
+  } else if (isComplated) {
+    this.setState({
+      tasks: updataTask(isComplated, key)
+    })
   }
+}
 
   render() {
     const {nameTask, tasks} = this.state
@@ -163,7 +156,7 @@ class TodoCard extends Component {
         <BrowserRouter>
         <SearchBar nameTask={nameTask} createTask={this.createTask} addTask={this.addTask}/>
 
-        <Route path="/all" render={(props)=> <AllTask  tasks={tasks} updataTask={this.updataTask}/>}/>
+        <Route path="/all" render={(props)=> <AllTask  tasks={tasks} addTask={this.addTask}/>}/>
       <Route path="/active"render={(props)=> <ActiveTaskTAble  tasks={tasks} />}/>
       <Route path="/complated" render={(props)=> <ComplateTaskTable  tasks={tasks}/>}/>
 
