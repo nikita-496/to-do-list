@@ -1,17 +1,177 @@
+import React, { Component } from 'react';
+import { BrowserRouter, NavLink, Route } from 'react-router-dom';
 import './App.css';
-import Header from './components/Header/Header';
 
-import Footer from './components/Footer/Footer';
-import TodoCard from './components/TodoCard/TodoCard';
 
-function App() {
+function Complated (props) {
+    function handleIsComplated(e) {
+    props.updateIsComplate(props.name,e.target.checked, props.id)
+    }
+
   return (
-    <div className="App">
-       <Header />
-       <TodoCard/>
-       <Footer />
-    </div>
-  );
+    <li>
+      <input type="checkbox" onClick={handleIsComplated}/>
+      <label>{props.name}</label>
+      <button type="button">Удалить</button>
+    </li>
+  )
 }
-export default App;
+
+function Active (props) {
+  function handleIsComplated(e) {
+    props.updateIsComplate(props.name,e.target.checked, props.id)
+    }
+
+  return (
+    <li>
+      <input type="checkbox" onClick={handleIsComplated}/>
+      <label>{props.name}</label>
+      <button type="button">Удалить</button>
+    </li>
+  )
+}
+
+
+function Task (props) {
+  function handleIsComplated(e) {
+    props.updateIsComplate(props.name,e.target.checked, props.id)
+  }
+  let taskType = <label>{props.name}</label>
+  return (
+    <li>
+      <input type="checkbox" onClick={handleIsComplated}/>
+      {taskType}
+      <button type="button">Удалить</button>
+    </li>
+  )
+}
+
+
+function NavBar() {
+  return(
+    <div>
+      <NavLink to="all">Все</NavLink>
+      <NavLink to="active">Активные</NavLink>
+      <NavLink to="complated">Завершенные</NavLink>
+    </div>
+  )
+}
+
+class TaskContainer extends Component  {
+  constructor(props){
+    super(props) 
+    this.state = {
+      isComplated: false
+    }
+    this.updateIsComplate = this.updateIsComplate.bind(this)
+  }
+  updateIsComplate(name, isComplated, key) {
+    this.setState({
+      isComplated
+    })
+    this.props.createTask(name ,isComplated,key)
+  }
+
+  render() {
+    const complatedTasks = this.props.tasks.filter(complate => complate.isComplated === true)
+    const activeTasks = this.props.tasks.filter(active => active.isComplated === false)
+    const tasks = this.props.tasks
+
+    return(
+      <BrowserRouter>
+        <ul>
+            {tasks.map((task)=>
+            
+                <Route path="/all" key={task.key} id={task.key} render={(props)=><Task name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
+             
+            )}
+            {activeTasks.map((task)=>
+              
+                <Route path="/active" key={task.key} id={task.key} render={(props)=><Active name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
+              
+            )}
+            {complatedTasks.map((task)=>
+             
+                  <Route path="/complated" key={task.key} id={task.key} render={(props)=><Complated name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
+             
+            )}
+        </ul>
+        <NavBar/>
+      </BrowserRouter>
+    )
+  }
+}
+
+function AddTask (props) {
+  function handleTaskName(e){
+    props.updateNameTask(e.target.value)
+  }
+  function AddNewTask(e){
+    props.createTask(e.target.value)
+  }
+return(
+  <div>
+    <input type="text" placeholder="введит задачу..." value={props.taskName} onChange={handleTaskName}/>
+    <button type="button" value={props.taskName} onClick={AddNewTask}> Добавить</button>
+  </div>
+)
+}
+
+export default class App extends Component {
+  constructor(props) {
+    super(props) 
+    this.state = {
+      taskName: '',
+      tasks: []
+    }
+    this.updateNameTask = this.updateNameTask.bind(this)
+    this.createTask = this.createTask.bind(this)
+  }
+   updateNameTask (taskName) {
+    this.setState({
+      taskName
+    })
+  }
+  createTask(taskName, isComplated = false, key) {
+    const taskArray = this.state.tasks
+
+       //Обновить свойство isComplate состояния tasks
+       function updateTask (isComplated,key) {
+        let tasksCopy = JSON.parse(JSON.stringify(taskArray))
+        let complatedTask = tasksCopy.filter(task => task.key === key)
+        complatedTask[0].isComplated = isComplated
+        return tasksCopy   
+      }
+    //введенная задача не пустая строка
+    if(taskName !== "" && key === undefined) {
+      
+      taskArray.unshift({
+        name: taskName,
+        key: Date.now(),
+        isComplated
+      })
+      this.setState({
+        taskName: "",
+        tasks: taskArray
+      })
+      
+    }
+    //задача помечена как завершенная
+    else if (isComplated) {
+      this.setState({
+        tasks: updateTask(isComplated, key)
+      })
+      
+    } 
+  }
+  render() {
+    const {taskName, tasks} = this.state
+    return(
+      <div>
+        <AddTask taskName={taskName} updateNameTask={this.updateNameTask} createTask={this.createTask}/>
+        <TaskContainer tasks={tasks} createTask={this.createTask}/>
+      </div>
+    )
+  }
+}
 
