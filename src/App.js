@@ -4,13 +4,17 @@ import './App.css';
 
 
 function Complated (props) {
+   
     function handleIsComplated(e) {
-    props.updateIsComplate(props.name,e.target.checked, props.id)
+    const {checked} = e.target
+    props.updateIsComplate(props.name, checked, props.id)
     }
 
+    //сохранять соятосние чекбокса при новом рендеринге компоненты 
+ 
   return (
     <li>
-      <input type="checkbox" onClick={handleIsComplated}/>
+      <input type="radio" onChange={handleIsComplated} checked={props.isComplated}/>
       <label>{props.name}</label>
       <button type="button">Удалить</button>
     </li>
@@ -24,22 +28,34 @@ function Active (props) {
 
   return (
     <li>
-      <input type="checkbox" onClick={handleIsComplated}/>
+      <input type="radio" onChange={handleIsComplated}/>
       <label>{props.name}</label>
       <button type="button">Удалить</button>
     </li>
   )
 }
 
-
 function Task (props) {
   function handleIsComplated(e) {
-    props.updateIsComplate(props.name,e.target.checked, props.id)
+    const {checked} = e.target
+    debugger
+    props.updateIsComplate(props.name,checked, props.id)
   }
-  let taskType = <label>{props.name}</label>
+  let taskType 
+  if(props.isComplated) {
+    taskType = <>  
+    <label className="complated">{props.name}</label>
+    </>
+
+  }else{
+    taskType = <>  
+    <label>{props.name}</label>
+    </>
+    
+  }
   return (
     <li>
-      <input type="checkbox" onClick={handleIsComplated}/>
+      <input type="radio" onChange={handleIsComplated} checked={props.isComplated}/>
       {taskType}
       <button type="button">Удалить</button>
     </li>
@@ -56,7 +72,7 @@ function NavBar() {
     </div>
   )
 }
-
+//Остановился на проблеме сохранения состояния при маршрутизации между задачами 
 class TaskContainer extends Component  {
   constructor(props){
     super(props) 
@@ -69,9 +85,8 @@ class TaskContainer extends Component  {
     this.setState({
       isComplated
     })
-    this.props.createTask(name ,isComplated,key)
+    this.props.createTask(name, isComplated,key)
   }
-
   render() {
     const complatedTasks = this.props.tasks.filter(complate => complate.isComplated === true)
     const activeTasks = this.props.tasks.filter(active => active.isComplated === false)
@@ -82,17 +97,17 @@ class TaskContainer extends Component  {
         <ul>
             {tasks.map((task)=>
             
-                <Route path="/all" key={task.key} id={task.key} render={(props)=><Task name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
+                <Route path="/all" key={task.key} id={task.key} render={(props)=><Task name={task.name} key={task.key} id={task.key} isComplated={this.state.isComplated} updateIsComplate={this.updateIsComplate}/>}/>
              
             )}
             {activeTasks.map((task)=>
               
-                <Route path="/active" key={task.key} id={task.key} render={(props)=><Active name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
+                <Route path="/active" key={task.key} id={task.key} render={(props)=><Active name={task.name} key={task.key} id={task.key}  isComplated={this.state.isComplated} updateIsComplate={this.updateIsComplate}/>}/>
               
             )}
             {complatedTasks.map((task)=>
              
-                  <Route path="/complated" key={task.key} id={task.key} render={(props)=><Complated name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
+                  <Route path="/complated" key={task.key} id={task.key} render={(props)=><Complated name={task.name} key={task.key} id={task.key}  isComplated={this.state.isComplated} updateIsComplate={this.updateIsComplate}/>}/>
              
             )}
         </ul>
