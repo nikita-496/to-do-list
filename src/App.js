@@ -2,49 +2,69 @@ import React, { Component } from 'react';
 import { BrowserRouter, NavLink, Route } from 'react-router-dom';
 import './App.css';
 
-
-function Complated (props) {
-    function handleIsComplated(e) {
-    props.updateIsComplate(props.name,e.target.checked, props.id)
-    }
-
-  return (
-    <li>
-      <input type="checkbox" onClick={handleIsComplated}/>
-      <label>{props.name}</label>
-      <button type="button">Удалить</button>
-    </li>
-  )
-}
-
-function Active (props) {
-  function handleIsComplated(e) {
-    props.updateIsComplate(props.name,e.target.checked, props.id)
-    }
-
-  return (
-    <li>
-      <input type="checkbox" onClick={handleIsComplated}/>
-      <label>{props.name}</label>
-      <button type="button">Удалить</button>
-    </li>
-  )
-}
-
-
-function Task (props) {
-  function handleIsComplated(e) {
-    props.updateIsComplate(props.name,e.target.checked, props.id)
+class ListTasks extends Component  {
+  constructor(props) {
+    super(props)
+    this.state = { isComplated: false}
+    this.handleIsComplated = this.handleIsComplated.bind(this)
   }
-  let taskType = <label>{props.name}</label>
-  return (
-    <li>
-      <input type="checkbox" onClick={handleIsComplated}/>
-      {taskType}
-      <button type="button">Удалить</button>
-    </li>
+  
+  handleIsComplated(e, name = this.props.name, key=this.props.id) {
+    
+    const isComplated = e.target.checked
+    this.props.createTask(name, isComplated, key)
+    this.setState({
+      isComplated
+    })
+  }
+  render () {  
+    return (
+      <li>
+        <input type="radio" onChange={this.handleIsComplated} checked={this.state.isComplated}/>
+        <label>{this.props.name}</label>
+        <button type="button">Удалить</button>
+      </li>
+    )
+  }
+
+}
+
+function ComplatedTask (props) {
+  return( 
+    <>
+    </>
+
   )
 }
+
+function ActiveTask (props) {
+  return( 
+    <>
+    </>
+
+  )
+}
+
+class AllTask extends Component{
+  constructor(props){
+    super(props)
+  }
+  render() {
+
+    //const typeTask 
+    const listTasks = this.props.tasks.map((task)=>
+    <ListTasks key={task.key} id={task.key} name={task.name} createTask={this.props.createTask}/> )
+  
+    return( 
+      <ul>
+       {listTasks}
+      </ul>
+  
+    )
+  }
+}
+
+ 
 
 
 function NavBar() {
@@ -55,51 +75,6 @@ function NavBar() {
       <NavLink to="complated">Завершенные</NavLink>
     </div>
   )
-}
-
-class TaskContainer extends Component  {
-  constructor(props){
-    super(props) 
-    this.state = {
-      isComplated: false
-    }
-    this.updateIsComplate = this.updateIsComplate.bind(this)
-  }
-  updateIsComplate(name, isComplated, key) {
-    this.setState({
-      isComplated
-    })
-    this.props.createTask(name ,isComplated,key)
-  }
-
-  render() {
-    const complatedTasks = this.props.tasks.filter(complate => complate.isComplated === true)
-    const activeTasks = this.props.tasks.filter(active => active.isComplated === false)
-    const tasks = this.props.tasks
-
-    return(
-      <BrowserRouter>
-        <ul>
-            {tasks.map((task)=>
-            
-                <Route path="/all" key={task.key} id={task.key} render={(props)=><Task name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
-             
-            )}
-            {activeTasks.map((task)=>
-              
-                <Route path="/active" key={task.key} id={task.key} render={(props)=><Active name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
-              
-            )}
-            {complatedTasks.map((task)=>
-             
-                  <Route path="/complated" key={task.key} id={task.key} render={(props)=><Complated name={task.name} key={task.key} id={task.key} updateIsComplate={this.updateIsComplate}/>}/>
-             
-            )}
-        </ul>
-        <NavBar/>
-      </BrowserRouter>
-    )
-  }
 }
 
 function AddTask (props) {
@@ -122,10 +97,12 @@ export default class App extends Component {
     super(props) 
     this.state = {
       taskName: '',
-      tasks: []
+      tasks: [],
+     
     }
     this.updateNameTask = this.updateNameTask.bind(this)
     this.createTask = this.createTask.bind(this)
+  
   }
    updateNameTask (taskName) {
     this.setState({
@@ -133,10 +110,11 @@ export default class App extends Component {
     })
   }
   createTask(taskName, isComplated = false, key) {
+    
     const taskArray = this.state.tasks
-
+      
        //Обновить свойство isComplate состояния tasks
-       function updateTask (isComplated,key) {
+       function updateTask (isComplated, key) {
         let tasksCopy = JSON.parse(JSON.stringify(taskArray))
         let complatedTask = tasksCopy.filter(task => task.key === key)
         complatedTask[0].isComplated = isComplated
@@ -159,18 +137,28 @@ export default class App extends Component {
     //задача помечена как завершенная
     else if (isComplated) {
       this.setState({
-        tasks: updateTask(isComplated, key)
+        tasks: updateTask(isComplated,key)
       })
       
     } 
   }
+
+
   render() {
-    const {taskName, tasks} = this.state
+    const {taskName, tasks, isComplated} = this.state
     return(
-      <div>
-        <AddTask taskName={taskName} updateNameTask={this.updateNameTask} createTask={this.createTask}/>
-        <TaskContainer tasks={tasks} createTask={this.createTask}/>
-      </div>
+      <BrowserRouter>
+       <AddTask taskName={taskName} updateNameTask={this.updateNameTask} createTask={this.createTask}/>
+
+       <Route path="/all" render={(props)=> <AllTask tasks={tasks} updateNameTask={this.updateNameTask} createTask={this.createTask} createTask={this.createTask}/>}/>
+        
+       <Route path="/active" render={(props)=> <ActiveTask tasks={tasks} createTask={this.createTask} />}/>
+        
+       <Route path="/complated" render={(props)=>  <ComplatedTask tasks={tasks} createTask={this.createTask} />}/>
+        
+
+        <NavBar />
+      </BrowserRouter>
     )
   }
 }
