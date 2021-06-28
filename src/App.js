@@ -107,10 +107,18 @@ function AllTask (props){
  
 function NavBar() {
   return(
-    <div>
-      <NavLink to="all">Все</NavLink>
-      <NavLink to="active">Активные</NavLink>
-      <NavLink to="complated">Завершенные</NavLink>
+    <div className="navigation">
+      <div>
+        <button className="btn-all">
+          <NavLink className= "link" to="all">Все</NavLink>
+        </button>
+        <button className="btn-active">
+         <NavLink className= "link"to="active">Активные</NavLink>
+        </button>
+        <button className="btn-complated">
+          <NavLink className= "link" to="complated">Завершенные</NavLink>
+      </button>
+      </div>
       <span>Удалить завершенные</span>
     </div>
   )

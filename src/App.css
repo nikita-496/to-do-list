@@ -6,19 +6,26 @@
   background-color:#F4F6F8FF;
 }
 
+/* Task */
 .complated {
   color: rgb(168, 166, 166);
   text-decoration: line-through;
 }
 
+ul{
+  padding: 0 70px;
+}
+
 ul li {
   list-style: none;
+  padding-bottom: 10px;
 }
 
 .wrapper{
   display: grid;
   grid-template-columns: 1fr 10fr 1fr ;
 }
+/* Task */
 
 /* AddTask */
 .form {
@@ -77,4 +84,42 @@ textarea:focus::-webkit-input-placeholder {
 }
 /* AddTask */
 
+/* NavBar*/
+.navigation{
+  display:grid;
+  grid-template-columns: 9fr 3fr;
+}
 
+.navigation div{
+  display:flex;
+  justify-content: center;
+}
+
+.btn-all, .btn-active, .btn-complated{
+  margin-left: 10px;
+
+  border: none;
+}
+
+.btn-all:hover {
+  background-color: yellow;
+}
+.btn-active:hover {
+  background-color: green;
+}
+.btn-complated:hover {
+  background-color: orange;
+}
+
+.link{
+  text-decoration: none;
+}
+.navigation span{
+  font-size: 13px;
+}
+
+.navigation span:hover{
+  border-radius: 3px;
+  background: #f28482;
+}
+/* NavBar*/
