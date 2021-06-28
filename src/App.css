@@ -1,9 +1,80 @@
-body{
-  background-color: #CBD2DDFF;
-}
 .App {
-  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  margin: 50px auto;
   width: 50%;
   background-color:#F4F6F8FF;
-  text-align: center;
 }
+
+.complated {
+  color: rgb(168, 166, 166);
+  text-decoration: line-through;
+}
+
+ul li {
+  list-style: none;
+}
+
+.wrapper{
+  display: grid;
+  grid-template-columns: 1fr 10fr 1fr ;
+}
+
+/* AddTask */
+.form {
+  display:flex;
+  justify-content: center;
+}
+.form-item{
+  position: relative;
+  padding-top: 40px;
+}
+.title {
+  position: absolute;
+  top: 50px;
+  transition: top 0.5s;
+}
+textarea {
+  width: 90%;
+  padding: 5px;
+  margin: auto;
+  margin-right: 15px;
+
+  border: 1px solid #ccc;
+  resize: none;
+  
+  border: none;
+  background: no-repeat bottom, 50% calc(100% - 1px);
+  background-size: 0 100%, 100% 100%;
+  background-image: linear-gradient(0deg, #9c27b0 2px, rgba(156, 39, 176, 0) 0), linear-gradient(0deg, #ccc 1px, hsla(0, 0%, 82%, 0) 0);
+}
+textarea:focus {
+  outline: none;
+  background-size: 100% 100%, 100% 100%;
+  transition-duration: 0.3s;
+  box-shadow: none;
+}
+textarea:focus+.title,
+textarea:not(:placeholder-shown)+.title{
+  top: 20px;
+  font-size: 12px
+}
+::-webkit-input-placeholder {
+  opacity: 0;
+}
+textarea:focus::-webkit-input-placeholder {
+  opacity: 1;
+}
+.form button {
+  width: 13%;
+  height: 35px;
+  margin-top: auto;
+
+  border: none;
+  border-radius: 3px;
+  background: #4D78CCFF;
+  
+}
+/* AddTask */
+
+
