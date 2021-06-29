@@ -2,53 +2,7 @@ import React, { Component } from 'react';
 import { BrowserRouter, NavLink, Route } from 'react-router-dom';
 import './App.css';
 
-function ListComplatedTasks (props){
-  function handleIsComplated  (e, taskName=props.name, key=props.id) {
-    const {checked} = e.target
-   props.createTask(taskName, checked, key)
-  }
-
-    let typeTask 
-    (props.isComplated) ? typeTask =  <label className="complated">{props.name}</label> 
-     :typeTask =  <label>{props.name}</label> 
-    return (
-      <li  className = "wrapper">
-        <input 
-              type="checkbox" 
-              name="isComplated" 
-              checked={props.isComplated}
-              onChange={handleIsComplated} 
-        />
-        {typeTask}
-        <button type="button">Удалить</button>
-      </li>
-    )
-  }
-
-function ListActiveTasks (props){
-  function handleIsComplated  (e, taskName=props.name, key=props.id) {
-    const {checked} = e.target
-   props.createTask(taskName, checked, key)
-  }
-
-    let typeTask 
-    (props.isComplated) ? typeTask =  <label className="complated">{props.name}</label> 
-     :typeTask =  <label>{props.name}</label> 
-    return (
-      <li  className = "wrapper">
-        <input 
-              type="checkbox" 
-              name="isComplated" 
-              checked={props.isComplated}
-              onChange={handleIsComplated} 
-        />
-        {typeTask}
-        <button type="button">Удалить</button>
-      </li>
-    )
-  }
-
-function ListAllTasks (props){
+function ListTasks (props){
   function handleIsComplated  (e, taskName=props.name, key=props.id) {
     const {checked} = e.target
    props.createTask(taskName, checked, key)
@@ -72,31 +26,14 @@ function ListAllTasks (props){
   }
 
 
-function ComplatedTask (props) {
-  const complated = props.tasks.filter(task => task.isComplated === true)
-    const listComplatedTasks = complated.map((task)=>
-    <ListComplatedTasks  name={task.name} key={task.key} id={task.key} isComplated={task.isComplated} createTask={props.createTask}/> )
-    return( 
-      <ul>
-       {listComplatedTasks}
-      </ul>
-    )
-}
-
-function ActiveTask (props) {
-  const active = props.tasks.filter(task => task.isComplated === false)
-    const listActiveTasks = active.map((task)=>
-    <ListActiveTasks  name={task.name} key={task.key} id={task.key} isComplated={task.isComplated} createTask={props.createTask}/> )
-  return( 
-    <ul>
-    {listActiveTasks}
-   </ul>
-  )
-}
-
 function AllTask (props){
-  const listTasks = props.tasks.map((task)=>
-    <ListAllTasks  name={task.name} key={task.key} id={task.key} isComplated={task.isComplated} createTask={props.createTask}/> )
+  let tasks
+  (props.type === 'all') ? tasks = props.tasks 
+  : (props.type === "active") ? tasks = props.tasks.filter(task => task.isComplated === false)
+  : tasks = props.tasks.filter(task => task.isComplated === true)
+  console.log(tasks)
+  const listTasks = tasks.map((task)=>
+    <ListTasks  name={task.name} key={task.key} id={task.key} isComplated={task.isComplated} createTask={props.createTask}/> )
     return( 
       <ul>
        {listTasks}
@@ -206,11 +143,11 @@ export default class App extends Component {
       </div>
 
       <div>
-       <Route path="/all" render={(props)=> <AllTask tasks={tasks} updateNameTask={this.updateNameTask} createTask={this.createTask}/>}/>
+       <Route path="/all" render={(props)=> <AllTask tasks={tasks}  createTask={this.createTask} type="all"/>}/>
         
-       <Route path="/active" render={(props)=> <ActiveTask tasks={tasks} createTask={this.createTask} />}/>
+       <Route path="/active" render={(props)=> <AllTask tasks={tasks} createTask={this.createTask} type="active"/>}/>
         
-       <Route path="/complated" render={(props)=>  <ComplatedTask tasks={tasks} createTask={this.createTask} />}/>
+       <Route path="/complated" render={(props)=>  <AllTask tasks={tasks} createTask={this.createTask} type="complated"/>}/>
       </div>
         
       <div>
