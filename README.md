@@ -78,4 +78,4 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
 
-Текст[here](app-javascript/blob/master/src/view/contacts.html)
+<code>Текст(https://github.com/nikita-496/app-javascript/blob/master/src/view/contacts.html)</code>
